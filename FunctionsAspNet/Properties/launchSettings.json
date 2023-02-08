@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "FunctionsAspNet": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7148",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FUNCTION_staticWebAssets": "true"
+      }
+    }
+  }
+}
