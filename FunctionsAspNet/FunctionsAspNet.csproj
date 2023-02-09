@@ -12,6 +12,20 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
     <!--<PackageReference Include="NL.Serverless.AspNetCore.AzureFunctionsHost" Version="5.1.0" />-->
   </ItemGroup>
+  <Target Name="PublishWebAppStaticFiles" BeforeTargets="Publish">
+    <Message Text="BeforePublish" Importance="high" />
+    <Message Text="TargetDir: $(TargetDir)" Importance="high" />
+    <Message Text="OutDir: $(OutDir)" Importance="high" />
+    <Message Text="PublishIntermediateOutputPath: $(PublishIntermediateOutputPath)" Importance="high" />
+    <Exec Command="dotnet publish --configuration $(Configuration)" WorkingDirectory="..\WebApp" />
+    <ItemGroup>
+       <_CopyItems Include="..\WebApp\bin\$(Configuration)\net6.0\publish\wwwroot\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFiles="@(_CopyItems->'$(PublishIntermediateOutputPath)\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--<Copy SourceFiles="@(_CopyItems)" DestinationFiles="@(_CopyItems->'$(OutDir)\publish\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />-->
+    <Copy SourceFiles="@(_CopyItems)" DestinationFiles="@(_CopyItems->'$(OutDir)\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--<Exec Command="should fail" WorkingDirectory="..\WebApp" />-->
+  </Target>
   <ItemGroup>
     <ProjectReference Include="..\NL.Serverless.AspNetCore.AzureFunctionsHost\NL.Serverless.AspNetCore.AzureFunctionsHost.csproj" />
     <ProjectReference Include="..\WebApp\WebApp.csproj" />
